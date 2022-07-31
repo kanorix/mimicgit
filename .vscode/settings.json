@@ -1,0 +1,24 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
+    "files.exclude": {
+        ".gitattributes": true,
+        ".gradle": true,
+        "gradle": true,
+        "gradlew": true,
+        "gradlew.bat": true,
+        "app/bin/**": true,
+        "app/build/**": true,
+    },
+    "java.format.settings.url": ".vscode/java-formatter.xml",
+    "java.format.settings.profile": "GoogleStyle",
+    "[java]": {
+        "editor.formatOnPaste": true,
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4
+    },
+}
