@@ -3,8 +3,8 @@ package net.kanorix.mimicgit;
 import net.kanorix.mimicgit.commands.Add;
 import net.kanorix.mimicgit.commands.Commit;
 import net.kanorix.mimicgit.commands.Init;
+import net.kanorix.mimicgit.commands.Restore;
 import net.kanorix.mimicgit.commands.Switch;
-import net.kanorix.mimicgit.exceptions.ExceptionHandler;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -13,15 +13,16 @@ import picocli.CommandLine.Command;
         version = "1.0",
         subcommands = {
                 Init.class,
-                Switch.class,
                 Add.class,
-                Commit.class
+                Commit.class,
+                Switch.class,
+                Restore.class,
         })
 public class App {
 
     public static void main(String[] args) {
         System.exit(new CommandLine(new App())
-                .setExecutionExceptionHandler(new ExceptionHandler())
+                // .setExecutionExceptionHandler(new ExceptionHandler())
                 .execute(args));
     }
 }

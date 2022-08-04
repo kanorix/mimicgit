@@ -63,11 +63,14 @@ public class GitRepositoryUtil {
      * @throws IOException
      */
     public static GitObject save(final GitObject object) throws IOException {
+
         final String hash = object.getHash();
         final var path = DIR.resolve(hash);
 
         // 同じハッシュが既に存在している場合、変更なし
         if (!Files.exists(path)) {
+            System.out.println(">> save object in repository");
+            System.out.println(object.inspect());
             Files.createFile(path);
             Files.writeString(path, object.toString());
         }
@@ -144,8 +147,14 @@ public class GitRepositoryUtil {
      * @throws IOException IO例外
      */
     public static TreeObject writeTreeByIndex(final TreeObject rootTree) throws IOException {
+        final var entries = IndexUtil.getIndexEntries();
+
+        if (entries.isEmpty()) {
+            throw new RuntimeException("Index is empty.");
+        }
+
         // Indexの情報でツリーを上書きする
-        for (var ie : IndexUtil.getIndexEntries()) {
+        for (var ie : entries) {
             TreeUtil.set(rootTree, ie.getFilePath(), GitRepositoryUtil.find(ie.getHash()));
         }
 

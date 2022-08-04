@@ -27,6 +27,8 @@ public class IndexUtil {
      */
     public static void update(Path filename) throws IOException {
 
+        System.out.println(">> update: index [%s]".formatted(filename.toString()));
+
         // ファイルからBlobObjectを作成する
         final GitObject object = new BlobObject(Files.readAllLines(filename));
 

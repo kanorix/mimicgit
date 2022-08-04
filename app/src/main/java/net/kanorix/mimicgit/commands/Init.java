@@ -8,7 +8,7 @@ import net.kanorix.mimicgit.utils.GitRepositoryUtil;
 import net.kanorix.mimicgit.utils.RefUtil;
 import picocli.CommandLine.Command;
 
-@Command(name = "init", helpCommand = true)
+@Command(name = "init")
 public class Init implements Callable<Integer> {
 
     @Override

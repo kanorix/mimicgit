@@ -23,10 +23,10 @@ public class Commit implements Callable<Integer> {
         final String branch = RefUtil.currentBranchName();
 
         // 親コミットを取得
-        final Optional<String> parentCommitHash = RefUtil.resolveBranch(branch);
+        final Optional<String> currentCommit = RefUtil.resolveBranch(branch);
 
         // 親コミットからツリーを取得（なければ新規ツリー）
-        final TreeObject parentTree = (TreeObject) parentCommitHash
+        final TreeObject parentTree = (TreeObject) currentCommit
                 .map(GitRepositoryUtil::find)
                 .map(o -> ((CommitObject) o).tree)
                 .map(GitRepositoryUtil::find)
@@ -36,7 +36,7 @@ public class Commit implements Callable<Integer> {
         final TreeObject rootTree = GitRepositoryUtil.writeTreeByIndex(parentTree);
 
         // Commit作成と保存
-        final var commit = new CommitObject(rootTree.getHash(), parentCommitHash.orElse(""));
+        final var commit = new CommitObject(rootTree.getHash(), currentCommit.orElse(""));
         GitRepositoryUtil.save(commit);
 
         // Commitのハッシュを取得
@@ -44,9 +44,6 @@ public class Commit implements Callable<Integer> {
 
         // ブランチの参照を更新する
         RefUtil.updateRef(branch, commitHash);
-
-        // 分かりやすいように表示
-        System.out.println("commit-hash: " + commitHash);
 
         return 0;
     }

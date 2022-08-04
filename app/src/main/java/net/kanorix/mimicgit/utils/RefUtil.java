@@ -38,11 +38,16 @@ public class RefUtil {
     public static String currentBranchName() {
         try {
             final var head = Files.readString(HEAD);
+            System.out.println(">> current branch is [%s]".formatted(head.isEmpty()
+                    ? "main"
+                    : head.replaceAll("ref: refs/heads/", "")));
+
             if (head.isEmpty()) {
                 // なければ「main」ブランチを作成する
                 RefUtil.updateHead("main");
                 return "main";
             }
+
             return head.replaceAll("ref: refs/heads/", "");
         } catch (IOException e) {
             throw new RuntimeException("Can't read HEAD");
@@ -55,7 +60,9 @@ public class RefUtil {
      * @return Commitのハッシュ値
      */
     public static Optional<String> resolveHead() {
-        return resolveBranch(currentBranchName());
+        final var result = resolveBranch(currentBranchName());
+        System.out.println(">> resolve: HEAD -> [%s]".formatted(result.orElse("")));
+        return result;
     }
 
     /**
@@ -66,10 +73,13 @@ public class RefUtil {
      */
     public static Optional<String> resolveBranch(final String branchName) {
         try {
-            final String commitHash = Files.readString(REFS.resolve(branchName));
-            return Optional.ofNullable(commitHash.isEmpty() || commitHash.isBlank()
+            final var commitHash = Files.readString(REFS.resolve(branchName));
+            final var result = Optional.ofNullable(commitHash.isEmpty() || commitHash.isBlank()
                     ? null
                     : commitHash);
+            System.out.println(">> resolve: [%s] -> [%s]".formatted(branchName, result.orElse("")));
+
+            return result;
         } catch (IOException e) {
             return Optional.empty();
         }
@@ -106,6 +116,7 @@ public class RefUtil {
     public static void updateRef(final String branchName, final String hash) throws IOException {
         // ブランチが参照しているコミットを更新
         Files.writeString(REFS.resolve(branchName), hash, StandardOpenOption.TRUNCATE_EXISTING);
+        System.out.println(">> update ref: [%s] -> [%s]".formatted(branchName, hash));
     }
 
     /**

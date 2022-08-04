@@ -1,6 +1,5 @@
 package net.kanorix.mimicgit.commands;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -15,7 +14,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-@Command(name = "restore", helpCommand = true)
+@Command(name = "restore")
 public class Restore implements Callable<Integer> {
 
     @Option(names = { "--source" }, description = "対象のコミットハッシュ値")
@@ -37,7 +36,7 @@ public class Restore implements Callable<Integer> {
 
         // ワーキングディレクトリを復元する
         final var target = TreeUtil.get(tree, filename).orElseThrow();
-        if (Files.isRegularFile(filename)) {
+        if (target instanceof BlobObject) {
             GitRepositoryUtil.restore(filename, (BlobObject) target);
         } else {
             GitRepositoryUtil.restore(filename, (TreeObject) target);

@@ -1,5 +1,8 @@
 package net.kanorix.mimicgit.objects;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.apache.commons.codec.digest.DigestUtils;
 
 public abstract class GitObject {
@@ -30,6 +33,19 @@ public abstract class GitObject {
      */
     public String getHash() {
         return DigestUtils.sha1Hex(getContent());
+    }
+
+    public String inspect() {
+        return Stream.of("""
+                =========== < Inspect Git Object > ===========
+                type: %s
+                hash: %s
+                ---------------------------------------------
+                %s
+                ==============================================
+                """.formatted(getType(), getHash(), getContent())
+                .split("\n")).map(s -> "    " + s)
+                .collect(Collectors.joining("\n"));
     }
 
     /**
